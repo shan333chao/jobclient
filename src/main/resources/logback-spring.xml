@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="catalina.base" value="${catalina.base:-./}" />
+    <property name="logstash.path" value="${catalina.base}/logs" />
+    <!-- 文件输出格式 -->
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${PATTERN}</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.ibatis" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" />
+        <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" />
+        <logger name="java.sql.Connection" level="DEBUG" />
+        <logger name="java.sql.Statement" level="DEBUG" />
+        <logger name="java.sql.PreparedStatement" level="DEBUG" />
+        <logger name="java.sql.ResultSet" level="debug" />
+        <logger name="com.users.dao" level="trace" />
+        <root level="debug">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    <!-- 测试环境 -->
+    <springProfile name="test">
+        <!-- 每天产生一个文件 -->
+        <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <Prudent>true</Prudent>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <FileNamePattern>${logstash.path}/sunday.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>500MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>15</maxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <Pattern>${PATTERN}</Pattern>
+            </layout>
+        </appender>
+        <root level="debug">
+            <appender-ref ref="LOGFILE" />
+        </root>
+    </springProfile>
+    <!-- 生产环境 -->
+    <springProfile name="prd">
+        <!-- 每天产生一个文件 -->
+        <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <Prudent>true</Prudent>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <FileNamePattern>${logstash.path}/sunday.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>500MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>15</maxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <Pattern>${PATTERN}</Pattern>
+            </layout>
+        </appender>
+        <root level="info">
+            <appender-ref ref="LOGFILE" />
+        </root>
+    </springProfile>
+</configuration>

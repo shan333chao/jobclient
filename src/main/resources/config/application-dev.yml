@@ -1,0 +1,43 @@
+server:
+ name: test
+ port: 8070
+
+spring:
+ datasource:
+    driver-class-name: com.microsoft.sqlserver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: 1
+    hikari:
+      maxLifetime: 1765000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
+      maximumPoolSize: 10 #连接池中允许的最大连接数。缺省值：10；推荐的公式：
+#mybatis
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  typeAliasesPackage: com.tutorchat.models.sql
+#logging
+logging:
+  config: classpath:logback-spring.xml
+
+xxl-job-executor:
+ appname: tutorchat-job
+ ip:
+ port: 8070
+
+
+mongodb:
+  shbasic:
+    uri: mongodb://127.0.0.1:28118/TutorChatBasicInfo
+  tpbasic:
+    uri: mongodb://127.0.0.1:28118/TutorChatBasicInfo
+  shmessage:
+    uri: mongodb://127.0.0.1:28118/TutorChatBasicInfo
+  tpmessage:
+    uri: mongodb://127.0.0.1:28118/TutorChatBasicInfo
+
+rabbitmq:
+ host: localhost
+ port: 5672
+ username: tutorchat
+ password: tutorchat123
+ virtualhost: tutorchat
